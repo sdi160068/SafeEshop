@@ -11,18 +11,20 @@
         <div class="row">
 
             <div class="col-6">
-                <h2 class="p-5">Προϊόντα</h2>
+                <h2 class="px-2 py-5">Κατάλογος</h2>
                 <p class="px-5">
                     {% for product in products %}
                     <div class="px-2 pt-2">
-                        {{ product.name }}<br>
-                        {{ product.price }}<br>
+                        <span>{{ product.name }}</span><br>
+                        <span>{{ product.price }} €</span><br>
+                        <a href="{{product.add_to_cart}}">Add to Cart</a>
+
                     </div>
                     {% endfor %}
                 </p>    
             </div>
             
-            <form action="add_product" method="post" class="p-5 col-6">
+            <form action="add-product" method="post" class="p-5 col-6">
                 <label for="name" class="col-2">Name</label>
                 <input type="text" name="name" id="name" class="col-4 border mt-2" required><br>
                 <label for="price" class="col-2">Price</label>
@@ -31,6 +33,7 @@
                 <input type="submit" value="submit" class="border mt-3"><br>
             </form>
         </div>
+        {{cart}}
     </div>
 </body>
 </html>

@@ -19,5 +19,5 @@ from django.urls import include,path
 
 urlpatterns = [
     path("", include('auth.urls')),
-    path("eshop/", include('eshop.urls')),
+    path("eshop/", include('eshop.urls', namespace='eshop')),
 ]
