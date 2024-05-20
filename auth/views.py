@@ -5,7 +5,7 @@ from auth.models import User
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password, check_password
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 
 def index(request):
     return render(request,'login.html')
