@@ -9,6 +9,11 @@
 <body>
     <form action="auth/login" method="POST" class="p-5">
         <h2>Login</h2>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
         <label for="username">Username</label>
         <input style="margin-bottom: 10px;" type="text" name="username" id="username" maxlength="100" required><br>
         <label for="password">Password</label>

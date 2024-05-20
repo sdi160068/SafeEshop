@@ -1,5 +1,5 @@
 import uuid
-from django.db import models
+from django.db import connection, models
 from django.urls import reverse
 
 from auth.models import User
@@ -23,7 +23,27 @@ class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def getProducts(self):
-        return OrderedProduct.objects.filter(cart_id=self.id).get()
+        with connection.cursor() as cursor:
+            # cursor.execute("SELECT name FROM eshop_orderedproduct")
+
+            cursor.execute("""
+                SELECT
+                    eshop_product.name,
+                    eshop_product.price,
+                    eshop_orderedproduct.quantity,
+                    eshop_orderedproduct.cart_id
+                FROM
+                    eshop_orderedproduct
+                JOIN
+                    eshop_product ON eshop_orderedproduct.product_id = eshop_product.id
+                WHERE
+                    eshop_orderedproduct.cart_id = %s;
+                           """,[str(self.id.hex)])
+
+            data = cursor.fetchall()
+
+        return data
+    
 class OrderedProduct(models.Model):
     product_id = models.UUIDField(default = uuid.uuid4)
     cart_id = models.UUIDField(default = uuid.uuid4)

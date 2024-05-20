@@ -10,3 +10,7 @@ class User(models.Model):
     
     def __str__(self):
         return self.username
+    
+class Token(models.Model):
+    id = models.UUIDField(default = uuid.uuid4,primary_key=True)
+    token = models.CharField(max_length=200,unique=True)
