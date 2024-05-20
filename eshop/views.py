@@ -70,7 +70,6 @@ def add_to_cart(request, id):
     else:
         oProduct.quantity += 1
         oProduct.save()
-    # return redirect("eshop:index")
     return HttpResponseRedirect("/eshop/")
 
 def add_address(request):
