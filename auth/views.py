@@ -1,7 +1,8 @@
+import datetime
 from django.contrib import messages
 from requests import Response
 import auth.jwt as jwt
-from auth.models import Token, User
+from auth.models import User
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password, check_password
@@ -15,30 +16,19 @@ def login(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             user = User.objects.filter(username=form.data["username"]).first()
-            if user != None and check_password(form.data["password"],user.password):
-                # token = request.COOKIES.get('jwt_token')
+            
+            response = HttpResponseRedirect('/eshop/')
 
-                token = request.headers.get('Authorization')
-                
-                if token and token.startswith('Bearer '):
-                    token = token[7:]
+            if user != None and check_password(form.data["password"],user.password):
+                token = request.COOKIES.get('jwt_token')
 
                 payload = jwt.decode_jwt(token)
 
                 if payload == None :
-                    token = jwt.encode_jwt({'id': str(user.id), 'username': user.username})
+                    # token => token for authentication and exp => expiration date of toiken , for cookie
+                    token, exp = jwt.encode_jwt({'id': str(user.id), 'username': user.username})
 
-                    token_save = Token(
-                        token = token
-                    )
-
-                    token_save.save()
-
-                response = HttpResponseRedirect('/eshop/')
-
-                response['message'] = "Login Successfully",
-                response['code'] = "HTTP_200_OK",
-                response['Authorization'] = f'Bearer {token}'
+                    response.set_cookie('jwt_token', token , expires=exp)
 
                 return response
             else: 

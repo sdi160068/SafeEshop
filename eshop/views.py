@@ -1,20 +1,16 @@
 from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
-from auth.jwt import decode_jwt, validate_token
-from auth.models import Token, User
+from auth.jwt import decode_jwt, decode_jwt
+from auth.models import User
 from eshop.forms import ProductForm
 from eshop.models import Cart, OrderedProduct, Product
 
 def index(request):
-    search = request.GET.get('search', None)
-    token = request.headers.get('Authorization')
-                
-    if token and token.startswith('Bearer '):
-        token = token[7:]
-    # token = request.COOKIES.get('jwt_token')
+    search = request.GET.get('search', None)                
+    token = request.COOKIES.get('jwt_token')
    
-    payload = validate_token(token)
+    payload = decode_jwt(token)
 
     if payload != None :
         if search == None or search == '':
@@ -49,7 +45,7 @@ def add_product(request):
 def add_to_cart(request, id):
     token = request.COOKIES.get('jwt_token')
    
-    payload = validate_token(token)
+    payload = decode_jwt(token)
 
     if payload == None :
         return HttpResponseNotFound()
@@ -80,7 +76,7 @@ def add_to_cart(request, id):
 def add_address(request):
     token = request.COOKIES.get('jwt_token')
    
-    payload = validate_token(token)
+    payload = decode_jwt(token)
 
     if payload == None :
         return HttpResponseNotFound()
@@ -113,7 +109,7 @@ def payment(request):
 def change_info(request):
     token = request.COOKIES.get('jwt_token')
    
-    payload = validate_token(token)
+    payload = decode_jwt(token)
 
     if payload == None :
         return HttpResponseNotFound()

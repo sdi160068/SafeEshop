@@ -1,0 +1,13 @@
+# Ignore all migrations and pycache files
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django
+**/migrations/
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Ignore all migrations files except the __init__.py files in migrations directories
