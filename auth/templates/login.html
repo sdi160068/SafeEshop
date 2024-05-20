@@ -21,17 +21,5 @@
         <input style="margin-bottom: 10px;" type="password" name="password" id="password" maxlength="100" required><br>
         <input type="submit" value="submit"><br>
     </form>
-
-    <form action="auth/register" method="POST" class="p-5">
-        {% csrf_token %}
-        <h2 >Register</h2>
-        <label for="username">Username</label>
-        <input style="margin-bottom: 10px;" type="text" name="username" id="username" maxlength="100" required><br>
-        <label for="password">Password</label>
-        <input style="margin-bottom: 10px;" type="password" name="password" id="password" maxlength="100" required><br>
-        <label for="confirm_password">Confirm Password</label>
-        <input style="margin-bottom: 10px;" type="password" name="confirm_password" id="confirm_password" maxlength="100" required><br>
-        <input type="submit" value="submit"><br>
-    </form>
 </body>
 </html>

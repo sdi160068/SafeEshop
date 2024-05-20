@@ -27,21 +27,6 @@ def index(request):
         return render(request,'index.html', context={"products": products, "cart" : cart, 'all' : all})
     return HttpResponseNotFound()
 
-def add_product(request):
-    if request.method == "POST":
-        form = ProductForm(request.POST)
-        if form.is_valid() \
-            and form.data["name"] != None \
-            and form.data["price"] != None :
-            
-            product = Product(
-                name = form.data["name"],
-                price = form.data["price"],
-            )
-            product.save()
-    return HttpResponseRedirect("/eshop/")
-
-
 def add_to_cart(request, id):
     token = request.COOKIES.get('jwt_token')
    

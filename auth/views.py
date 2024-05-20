@@ -1,12 +1,10 @@
-import datetime
 from django.contrib import messages
-from requests import Response
 import auth.jwt as jwt
 from auth.models import User
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password, check_password
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm
 
 def index(request):
     return render(request,'login.html')
@@ -34,13 +32,3 @@ def login(request):
             else: 
                 messages.error(message='The username or the password are incorrect.',request=request)
     return redirect('/')
-
-
-
-def register(request):
-    if request.method == "POST":
-        form = RegisterForm(request.POST)
-        if form.is_valid() and form.data["password"] == form.data["confirm_password"]:
-            user = User(username= form.data["username"], password = make_password(form.data["password"]))
-            user.save()
-    return HttpResponseRedirect("/")
