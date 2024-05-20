@@ -1,4 +1,4 @@
-import datetime
+from django.utils.crypto import get_random_string
 from django.contrib import messages
 from requests import Response
 import auth.jwt as jwt
@@ -19,7 +19,7 @@ def login(request):
             
             response = HttpResponseRedirect('/eshop/')
 
-            if user != None and check_password(form.data["password"],user.password):
+            if user != None and custom_check_password(form.data["password"],user.password):
                 token = request.COOKIES.get('jwt_token')
 
                 payload = jwt.decode_jwt(token)
@@ -35,12 +35,24 @@ def login(request):
                 messages.error(message='The username or the password are incorrect.',request=request)
     return redirect('/')
 
+def custom_check_password(password, stored_password):
+    try: 
+        stored_salt, actual_password = stored_password.split(':')
 
+        hashed_password_to_check = make_password(password, salt=stored_salt, hasher='argon2')
+
+        return actual_password == hashed_password_to_check
+    except Exception :
+        return False
 
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid() and form.data["password"] == form.data["confirm_password"]:
-            user = User(username= form.data["username"], password = make_password(form.data["password"]))
+
+            salt = get_random_string(length=12)
+
+            password = salt + ":"+ make_password(form.data["password"],salt=salt,hasher="argon2")
+            user = User(username= form.data["username"], password = password)
             user.save()
     return HttpResponseRedirect("/")
