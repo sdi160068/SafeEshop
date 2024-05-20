@@ -9,18 +9,56 @@
 <body>
     <div class="container">
         <h2 class="pt-5">Το Καλάθι σου</h2>
-        {% for item in cart.getProducts %}
-        <div class="px-2 pt-2">
-            <span>{{ item.0 }}</span><span class="ps-5">{{ item.2 }}<br>
+        <div class="border border-5" style="width: 300px;">
+            {% for item in cart.getProducts %}
+                <div class="row px-2" style="width: 300px;">
+                    <div class="col">
+                        <b>{{ item.0 }} :</b>
+                    </div>
+                    <div class="col">
+                        {{ item.2 }}
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
     <div class="container pt-3">
-        <h5><b>Δήλωσε την διεύθυνσή σου εδώ</b></h5>
-        <form action="" method="post">
-            <input type="text" name="address" id="address" required><br>
-            <input class="mt-4" type="submit" value="Πληρωμή">
-        </form>
+        {% if cart.address == "" %}
+            <h5><b>Δήλωσε την διεύθυνσή σου εδώ</b></h5>
+            <form action="/eshop/add_address/" method="post">
+                {% csrf_token %}
+                <input type="text" name="address" id="address" required><br>
+                <input class="mt-4" type="submit" value="Δήλωση">
+            </form>
+        {% elif cart.address != "" and cart.paid == False %}
+            <div class="row px-2" style="width: 300px;">
+                <div class="col">
+                    <b>Διεύθυνση :</b>
+                </div>
+                <div class="col">
+                    {{ cart.address }}
+                </div>
+            </div>
+            <a class="mt-4 btn btn-primary" href="/eshop/payment/">
+                Ολοκλήρωση Παραγγελίας
+            </a>
+            <a class="mt-4 btn btn-danger" href="/eshop/change_info/">
+                Διόρθωσε τα στοιχεία σου
+            </a>
+            
+            
+        {% endif %}
+        <div class="row mt-3" style="width: 500px;">
+            <div class="col">
+                <a class="btn {% if cart.address == '' %} btn-primary {% else %} btn-secondary {% endif %}" href="/eshop/change_info/">1</a>
+            </div>
+            <div class="col">
+                <span class="btn {% if cart.paid == False and cart.address != '' %} btn-primary {% else %} btn-secondary {% endif %}">2</span>
+            </div>                
+            <div class="col">
+                <span class="btn {% if cart.paid == True %} btn-primary {% else %} btn-secondary {% endif %}">3</span>    
+            </div>
+        </div>
     </div>
 
 </body>

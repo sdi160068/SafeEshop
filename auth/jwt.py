@@ -4,11 +4,12 @@ import json
 import hashlib
 import datetime
 
+from auth.models import Token
 from secureProject import settings
 
 def encode_jwt(payload):
     # Add expiration time to the payload
-    exp = datetime.datetime.now() + datetime.timedelta(minutes=30)
+    exp = datetime.datetime.now() + datetime.timedelta(minutes=120)
     payload['exp'] = exp.isoformat()    
     # Encode the payload as JSON
     encoded_payload = json.dumps(payload)
@@ -47,3 +48,16 @@ def decode_jwt(token):
 
     # If any error occurs or token is invalid, return None
     return None
+
+def validate_token(token):
+    token_obj = Token.objects.filter(token=token).first()
+
+    if token_obj == None :
+        return None
+
+    paylaod = decode_jwt(token)
+
+    if paylaod == None :
+        token_obj.delete()
+    
+    return paylaod

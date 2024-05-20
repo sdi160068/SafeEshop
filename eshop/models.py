@@ -21,6 +21,8 @@ class Product(models.Model):
 class Cart(models.Model):
     id = models.UUIDField(default = uuid.uuid4,primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address = models.CharField(max_length=200, default="")
+    paid = models.BooleanField(default=False)
 
     def getProducts(self):
         with connection.cursor() as cursor:
