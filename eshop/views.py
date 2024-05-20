@@ -1,3 +1,4 @@
+import re
 from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
@@ -72,7 +73,8 @@ def add_address(request):
     if cart.address != "":
         return HttpResponseRedirect("/eshop/payment/")
     
-    cart.address = request.POST.get("address")
+    cart.address = re.sub(r'[^a-zA-Z0-9\s]', '', request.POST.get("address"))
+
     cart.save()
 
     return HttpResponseRedirect("/eshop/payment/")
