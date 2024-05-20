@@ -1,4 +1,5 @@
 from django.contrib import messages
+from requests import Response
 import auth.jwt as jwt
 from auth.models import Token, User
 from django.shortcuts import redirect, render
@@ -16,6 +17,12 @@ def login(request):
             user = User.objects.filter(username=form.data["username"]).first()
             if user != None and check_password(form.data["password"],user.password):
                 token = request.COOKIES.get('jwt_token')
+
+                # token = request.headers.get('Authorization')
+                
+                if token and token.startswith('Bearer '):
+                    token = token[7:]
+
                 payload = jwt.decode_jwt(token)
 
                 if payload == None :
@@ -29,7 +36,9 @@ def login(request):
 
                 response = HttpResponseRedirect('/eshop/')
 
-                response.set_cookie('jwt_token', token)
+                response['message'] = "Login Successfully",
+                response['code'] = "HTTP_200_OK",
+                response['Authorization'] = f'Bearer {token}'
 
                 return response
             else: 

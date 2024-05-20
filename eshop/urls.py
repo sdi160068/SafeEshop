@@ -11,4 +11,5 @@ urlpatterns = [
     path('payment/', views.payment,name='payment'),
     path('add_address/',views.add_address,name='add_address' ),
     path('change_info/',views.change_info,name='change_info' ),
+    path('complete_payment/', views.complete_payment,name='complete_payment'),
 ]
