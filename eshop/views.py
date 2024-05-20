@@ -10,9 +10,9 @@ def index(request):
     search = request.GET.get('search', None)
     token = request.headers.get('Authorization')
                 
-    # if token and token.startswith('Bearer '):
-    #     token = token[7:]
-    token = request.COOKIES.get('jwt_token')
+    if token and token.startswith('Bearer '):
+        token = token[7:]
+    # token = request.COOKIES.get('jwt_token')
    
     payload = validate_token(token)
 

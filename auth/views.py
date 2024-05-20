@@ -16,9 +16,9 @@ def login(request):
         if form.is_valid():
             user = User.objects.filter(username=form.data["username"]).first()
             if user != None and check_password(form.data["password"],user.password):
-                token = request.COOKIES.get('jwt_token')
+                # token = request.COOKIES.get('jwt_token')
 
-                # token = request.headers.get('Authorization')
+                token = request.headers.get('Authorization')
                 
                 if token and token.startswith('Bearer '):
                     token = token[7:]
