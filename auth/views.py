@@ -31,4 +31,6 @@ def login(request):
                 return response
             else: 
                 messages.error(message='The username or the password are incorrect.',request=request)
+        else: 
+            messages.error(message='The username or the password are incorrect.',request=request)
     return redirect('/')
